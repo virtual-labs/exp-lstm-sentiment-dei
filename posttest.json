@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Why is text preprocessing necessary before training the RNN and LSTM models?",
+      "answers": {
+        "a": "To remove noise such as punctuation, digits, and extra spaces",
+        "b": "To increase the number of words in each review",
+        "c": "To convert labels into numeric form",
+        "d": "To increase the training epochs automatically"
+      },
+      "explanations": {
+        "a": "Correct because cleaning improves model learning by reducing irrelevant information.",
+        "b": "Incorrect because preprocessing aims to reduce noise, not increase text size.",
+        "c": "Incorrect because labels are already numeric and preprocessing is applied to text.",
+        "d": "Incorrect because preprocessing does not control training duration."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the purpose of tokenization in the experiment?",
+      "answers": {
+        "a": "To directly classify text into positive or negative classes",
+        "b": "To map words into integer indices for neural network input",
+        "c": "To remove stop words permanently from the dataset",
+        "d": "To evaluate model accuracy"
+      },
+      "explanations": {
+        "a": "Incorrect because tokenization only converts text into numerical format.",
+        "b": "Correct because neural networks require numerical input, not raw text.",
+        "c": "Incorrect because tokenization does not necessarily remove stop words.",
+        "d": "Incorrect because evaluation is done after model prediction."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why are sequences padded to a fixed maximum length?",
+      "answers": {
+        "a": "To increase vocabulary size",
+        "b": "To ensure all inputs have the same length for batch processing",
+        "c": "To improve GPU memory usage",
+        "d": "To convert labels into binary format"
+      },
+      "explanations": {
+        "a": "Incorrect because padding does not affect vocabulary.",
+        "b": "Correct because neural networks require uniform input dimensions.",
+        "c": "Incorrect because padding may increase memory usage.",
+        "d": "Incorrect because padding applies to input sequences, not labels."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What role does the Embedding layer play in the models?",
+      "answers": {
+        "a": "It converts probabilities into class labels",
+        "b": "It reduces the number of epochs required",
+        "c": "It performs sentiment classification directly",
+        "d": "It learns dense vector representations of words"
+      },
+      "explanations": {
+        "a": "Incorrect because classification is done by the output layer.",
+        "b": "Incorrect because embedding does not directly control training duration.",
+        "c": "Incorrect because embeddings are feature representations, not classifiers.",
+        "d": "Correct because embeddings capture semantic relationships between words."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why is binary cross-entropy used as the loss function in this experiment?",
+      "answers": {
+        "a": "Because the dataset has multiple sentiment classes",
+        "b": "Because it reduces overfitting automatically",
+        "c": "Because it is suitable for binary classification problems",
+        "d": "Because it works only with RNNs"
+      },
+      "explanations": {
+        "a": "Incorrect because the task is binary classification.",
+        "b": "Incorrect because regularization techniques address overfitting.",
+        "c": "Correct because binary cross-entropy measures error between predicted and actual binary labels.",
+        "d": "Incorrect because it is used across many binary classifiers."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does a confusion matrix help evaluate in sentiment analysis?",
+      "answers": {
+        "a": "Word frequency distribution",
+        "b": "Relationship between training and validation loss",
+        "c": "Correct and incorrect classification counts",
+        "d": "Sequence length distribution"
+      },
+      "explanations": {
+        "a": "Incorrect because it evaluates prediction outcomes, not vocabulary.",
+        "b": "Incorrect because loss curves handle that.",
+        "c": "Correct because it shows true positives, true negatives, false positives, and false negatives.",
+        "d": "Incorrect because padding controls sequence length."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why are ROC and Precision–Recall curves plotted in this experiment?",
+      "answers": {
+        "a": "To visualize training time",
+        "b": "To analyse classifier performance across different thresholds",
+        "c": "To compare vocabulary sizes",
+        "d": "To determine batch size"
+      },
+      "explanations": {
+        "a": "Incorrect because they visualize classification performance.",
+        "b": "Correct because these curves evaluate trade-offs between true positives, false positives, precision, and recall.",
+        "c": "Incorrect because curves do not depend on vocabulary.",
+        "d": "Incorrect because batch size is a training parameter."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why does the LSTM model generally perform better than a Simple RNN in this experiment?",
+      "answers": {
+        "a": "LSTM has fewer parameters",
+        "b": "LSTM removes vanishing gradients completely",
+        "c": "LSTM requires less training data",
+        "d": "LSTM can capture long-term dependencies in text"
+      },
+      "explanations": {
+        "a": "Incorrect because LSTM has more parameters than RNN.",
+        "b": "Incorrect because it mitigates but does not eliminate the problem.",
+        "c": "Incorrect because data requirements depend on task complexity.",
+        "d": "Correct because gating mechanisms allow LSTM to retain relevant information."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does validation accuracy indicate during training?",
+      "answers": {
+        "a": "Model performance on unseen test data",
+        "b": "Model performance on training data only",
+        "c": "Model generalization performance during training",
+        "d": "Vocabulary learning quality"
+      },
+      "explanations": {
+        "a": "Incorrect because validation data is separate from the test set.",
+        "b": "Incorrect because training accuracy reflects training performance.",
+        "c": "Correct because validation accuracy estimates how well the model generalizes.",
+        "d": "Incorrect because vocabulary is fixed during tokenization."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the final objective of comparing Simple RNN and LSTM models in this experiment?",
+      "answers": {
+        "a": "To demonstrate the importance of long-term dependency modelling in sentiment analysis",
+        "b": "To prove that RNN is always better than LSTM",
+        "c": "To reduce dataset size",
+        "d": "To eliminate the need for preprocessing"
+      },
+      "explanations": {
+        "a": "Correct because movie reviews require contextual understanding over long sequences.",
+        "b": "Incorrect because results depend on task complexity.",
+        "c": "Incorrect because comparison does not affect dataset.",
+        "d": "Incorrect because preprocessing remains essential."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    }
+  ]
+}

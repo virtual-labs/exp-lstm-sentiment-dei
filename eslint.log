@@ -1,0 +1,17 @@
+
+/home/runner/work/exp-lstm-sentiment-dei/exp-lstm-sentiment-dei/experiment/simulation/js/data.js
+  6:7  warning  'EXPERIMENT_DATA' is assigned a value but never used  no-unused-vars
+
+/home/runner/work/exp-lstm-sentiment-dei/exp-lstm-sentiment-dei/experiment/simulation/js/main.js
+  229:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  233:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  237:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  246:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  250:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  254:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  263:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  267:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+  271:33  warning  'EXPERIMENT_DATA' is not defined  no-undef
+
+✖ 10 problems (0 errors, 10 warnings)
+
