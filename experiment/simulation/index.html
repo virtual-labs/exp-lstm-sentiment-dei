@@ -1,13 +1,582 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
-</head>
-<body>
-		<!-- Your code goes here-->
+<html lang="en">
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sentiment Analysis using LSTM - Comparison with RNN</title>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+	<div class="simulation-container">
+		<!-- Step Indicator Sidebar -->
+		<aside class="step-sidebar">
+			<div class="step-sidebar-header">
+				<h3>Experiment Steps</h3>
+			</div>
+			<div class="step-list">
+				<div class="step-item" data-step="1">
+					<div class="step-indicator">
+						<span class="step-number">1</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Import Libraries</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="2">
+					<div class="step-indicator">
+						<span class="step-number">2</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Define Parameters</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="3">
+					<div class="step-indicator">
+						<span class="step-number">3</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Dataset Preprocessing</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="4">
+					<div class="step-indicator">
+						<span class="step-number">4</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Data Splitting</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="5">
+					<div class="step-indicator">
+						<span class="step-number">5</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Model Architectures</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="6">
+					<div class="step-indicator">
+						<span class="step-number">6</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Model Training</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="7">
+					<div class="step-indicator">
+						<span class="step-number">7</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Model Evaluation</span>
+					</div>
+				</div>
+				<div class="step-item" data-step="8">
+					<div class="step-indicator">
+						<span class="step-number">8</span>
+					</div>
+					<div class="step-content">
+						<span class="step-title">Visualization</span>
+					</div>
+				</div>
+			</div>
+			<div class="step-sidebar-footer">
+			<button class="run-all-btn" id="downloadBtn">
+					Download Experiment
+				</button>
+				<button class="reset-btn" id="resetBtn">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+						<path
+							d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+					</svg>
+					Reset
+				</button>
+			</div>
+		</aside>
+
+		<!-- Main Notebook Area -->
+		<main class="notebook-area">
+			<div class="notebook-header">
+				<h1>Sentiment Analysis using LSTM - Comparison with RNN</h1>
+				<p class="notebook-subtitle">Using Stanford IMDb Movie Reviews Dataset</p>
+			</div>
+
+			<!-- Cell 1: Import Libraries -->
+			<div class="notebook-cell" data-cell="1" data-step="1">
+				<div class="cell-header">
+					<span class="cell-label">Step 1: Import Libraries</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Importing Libraries</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
+<span class="keyword">import</span> re, string, os
+
+<span class="keyword">from</span> tensorflow.keras.models <span class="keyword">import</span> Sequential, load_model
+<span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Embedding, SimpleRNN, LSTM, Dense, Input
+<span class="keyword">from</span> tensorflow.keras.preprocessing.text <span class="keyword">import</span> Tokenizer
+<span class="keyword">from</span> tensorflow.keras.preprocessing.sequence <span class="keyword">import</span> pad_sequences
+<span class="keyword">from</span> tensorflow.keras.optimizers <span class="keyword">import</span> Adam
+<span class="keyword">from</span> tensorflow.keras.callbacks <span class="keyword">import</span> ModelCheckpoint
+<span class="keyword">from</span> tensorflow.keras.callbacks <span class="keyword">import</span> ReduceLROnPlateau
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix, classification_report
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve, auc, precision_recall_curve, average_precision_score
+<span class="keyword">from</span> matplotlib.ticker <span class="keyword">import</span> FormatStrFormatter
+
+<span class="builtin">print</span>(<span class="string">"All the required libraries are imported.\n"</span>)</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content text-output">
+						<pre>All the required libraries are imported.</pre>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 2: Define Parameters -->
+			<div class="notebook-cell" data-cell="2" data-step="2">
+				<div class="cell-header">
+					<span class="cell-label">Step 2: Define Parameters</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Defining paths & Parameters</span>
+VOCAB_SIZE = <span class="number">10000</span>
+MAX_LEN = <span class="number">300</span>
+EMBED_DIM = <span class="number">256</span>
+RNN_UNITS = <span class="number">256</span>
+LSTM_UNITS = <span class="number">64</span>
+BATCH_SIZE = <span class="number">128</span>
+EPOCHS = <span class="number">150</span>
+
+BASE_PATH = <span class="string">"/kaggle/input/standford-dataset/aclImdb"</span>
+TRAIN_POS = os.path.join(BASE_PATH, <span class="string">"train/pos"</span>)
+TRAIN_NEG = os.path.join(BASE_PATH, <span class="string">"train/neg"</span>)
+TEST_POS  = os.path.join(BASE_PATH, <span class="string">"test/pos"</span>)
+TEST_NEG  = os.path.join(BASE_PATH, <span class="string">"test/neg"</span>)
+
+<span class="builtin">print</span>(<span class="string">f"Parameters for training are set as:"</span>)
+<span class="builtin">print</span>(<span class="string">f"  Vocabulary Size: {VOCAB_SIZE}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  Maximum Sequence Length: {MAX_LEN}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  Embedding Dimensions: {EMBED_DIM}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  RNN units: {RNN_UNITS}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  LSTM units: {LSTM_UNITS}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  Batch Size: {BATCH_SIZE}"</span>)
+<span class="builtin">print</span>(<span class="string">f"  Epochs: {EPOCHS}"</span>)</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content text-output">
+						<pre>Parameters for training are set as:
+  Vocabulary Size: 10000
+  Maximum Sequence Length: 300
+  Embedding Dimensions: 256
+  RNN units: 256
+  LSTM units: 64
+  Batch Size: 128
+  Epochs: 150</pre>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 3: Dataset Preprocessing -->
+			<div class="notebook-cell" data-cell="3" data-step="3">
+				<div class="cell-header">
+					<span class="cell-label">Step 3: Dataset Preprocessing</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Dataset Preprocessing</span>
+<span class="keyword">def</span> <span class="function">clean_text</span>(text):
+    text = text.lower()
+    text = re.sub(<span class="string">r'\[.*?\]'</span>, <span class="string">''</span>, text)
+    text = re.sub(<span class="string">r'[%s]'</span> % re.escape(string.punctuation), <span class="string">''</span>, text)
+    text = re.sub(<span class="string">r'\w*\d\w*'</span>, <span class="string">''</span>, text)
+    text = re.sub(<span class="string">r'\s+'</span>, <span class="string">' '</span>, text).strip()
+    <span class="keyword">return</span> text
+
+<span class="comment"># ======================= LOAD REVIEWS =======================</span>
+<span class="keyword">def</span> <span class="function">load_reviews</span>(folder, label, max_samples):
+    texts, labels = [], []
+    files = <span class="builtin">sorted</span>(os.listdir(folder))[:max_samples]
+    <span class="keyword">for</span> f <span class="keyword">in</span> files:
+        <span class="keyword">with</span> <span class="builtin">open</span>(os.path.join(folder, f), encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> file:
+            texts.append(file.read())
+            labels.append(label)
+    <span class="keyword">return</span> texts, labels</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content text-output">
+						<span class="success-text">✓ Preprocessing functions defined successfully</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 4: Data Splitting -->
+			<div class="notebook-cell" data-cell="4" data-step="4">
+				<div class="cell-header">
+					<span class="cell-label">Step 4: Train-Val-Test Splitting</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Train-Val-Test Splitting</span>
+train_pos, y_train_pos = load_reviews(TRAIN_POS, <span class="number">1</span>, <span class="number">4250</span>)
+train_neg, y_train_neg = load_reviews(TRAIN_NEG, <span class="number">0</span>, <span class="number">4250</span>)
+
+X_train_full = np.array(train_pos + train_neg)
+y_train_full = np.array(y_train_pos + y_train_neg)
+
+test_pos, y_test_pos = load_reviews(TEST_POS, <span class="number">1</span>, <span class="number">750</span>)
+test_neg, y_test_neg = load_reviews(TEST_NEG, <span class="number">0</span>, <span class="number">750</span>)
+
+X_test = np.array(test_pos + test_neg)
+y_test = np.array(y_test_pos + y_test_neg)
+
+<span class="builtin">print</span>(<span class="string">"Train+Val:"</span>, <span class="builtin">len</span>(X_train_full))
+<span class="builtin">print</span>(<span class="string">"Test     :"</span>, <span class="builtin">len</span>(X_test))
+
+X_train_full = np.array([clean_text(x) <span class="keyword">for</span> x <span class="keyword">in</span> X_train_full])
+X_test       = np.array([clean_text(x) <span class="keyword">for</span> x <span class="keyword">in</span> X_test])
+
+X_train, X_val, y_train, y_val = train_test_split(
+    X_train_full,
+    y_train_full,
+    test_size=<span class="number">1500</span>,
+    random_state=<span class="number">42</span>,
+    stratify=y_train_full
+)
+
+<span class="builtin">print</span>(<span class="string">"Train:"</span>, <span class="builtin">len</span>(X_train))
+<span class="builtin">print</span>(<span class="string">"Val  :"</span>, <span class="builtin">len</span>(X_val))
+<span class="builtin">print</span>(<span class="string">"Test :"</span>, <span class="builtin">len</span>(X_test))
+
+<span class="builtin">print</span>(<span class="string">"Train balance:"</span>, np.bincount(y_train))
+<span class="builtin">print</span>(<span class="string">"Val balance  :"</span>, np.bincount(y_val))
+<span class="builtin">print</span>(<span class="string">"Test balance :"</span>, np.bincount(y_test))
+
+<span class="comment"># Tokenization</span>
+tokenizer = Tokenizer(num_words=VOCAB_SIZE, oov_token=<span class="string">"&lt;UNK&gt;"</span>)
+tokenizer.fit_on_texts(X_train)
+
+X_train_pad = pad_sequences(tokenizer.texts_to_sequences(X_train), maxlen=MAX_LEN)
+X_val_pad   = pad_sequences(tokenizer.texts_to_sequences(X_val),   maxlen=MAX_LEN)
+X_test_pad  = pad_sequences(tokenizer.texts_to_sequences(X_test),  maxlen=MAX_LEN)</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content text-output">
+						<pre>Train+Val: 8500
+Test     : 1500
+Train: 7000
+Val  : 1500
+Test : 1500
+Train balance: [3500 3500]
+Val balance  : [750 750]
+Test balance : [750 750]</pre>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 5: Model Architectures -->
+			<div class="notebook-cell" data-cell="5" data-step="5">
+				<div class="cell-header">
+					<span class="cell-label">Step 5: Model Architectures & Checkpoints</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Defining Model Architectures & Checkpoints</span>
+
+<span class="comment"># Simple RNN Model</span>
+model_rnn = Sequential([
+    Input(shape=(MAX_LEN,)),
+    Embedding(VOCAB_SIZE, EMBED_DIM),
+    SimpleRNN(RNN_UNITS, dropout=<span class="number">0.3</span>, recurrent_dropout=<span class="number">0.1</span>),
+    Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>)
+])
+
+model_rnn.compile(
+    optimizer=Adam(<span class="number">3e-5</span>),
+    loss=<span class="string">'binary_crossentropy'</span>,
+    metrics=[<span class="string">'accuracy'</span>]
+)
+
+<span class="comment"># LSTM Model</span>
+model_lstm = Sequential([
+    Input(shape=(MAX_LEN,)),
+    Embedding(VOCAB_SIZE, EMBED_DIM),
+    LSTM(LSTM_UNITS, dropout=<span class="number">0.3</span>),
+    Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>)
+])
+
+model_lstm.compile(
+    optimizer=Adam(<span class="number">1e-5</span>),
+    loss=<span class="string">'binary_crossentropy'</span>,
+    metrics=[<span class="string">'accuracy'</span>]
+)
+
+<span class="comment"># Model Checkpoints</span>
+rnn_ckpt  = ModelCheckpoint(<span class="string">"best_rnn.keras"</span>, monitor=<span class="string">"val_accuracy"</span>,
+                            save_best_only=<span class="keyword">True</span>, mode=<span class="string">'max'</span>, verbose=<span class="number">0</span>)
+lstm_ckpt = ModelCheckpoint(<span class="string">"best_lstm.keras"</span>, monitor=<span class="string">"val_accuracy"</span>,
+                            save_best_only=<span class="keyword">True</span>, mode=<span class="string">'max'</span>, verbose=<span class="number">0</span>)
+
+reduce_lr_rnn = ReduceLROnPlateau(
+    monitor=<span class="string">"val_loss"</span>,
+    factor=<span class="number">0.5</span>,
+    patience=<span class="number">6</span>,
+    min_lr=<span class="number">1e-6</span>,
+    verbose=<span class="number">0</span>
+)
+
+reduce_lr_lstm = ReduceLROnPlateau(
+    monitor=<span class="string">"val_loss"</span>,
+    factor=<span class="number">0.5</span>,
+    patience=<span class="number">6</span>,
+    min_lr=<span class="number">1e-6</span>,
+    verbose=<span class="number">0</span>
+)</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content text-output">
+						<span class="success-text">✓ RNN and LSTM models defined successfully</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 6: Model Training -->
+			<div class="notebook-cell" data-cell="6" data-step="6">
+				<div class="cell-header">
+					<span class="cell-label">Step 6: Model Training</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Model Training</span>
+
+<span class="builtin">print</span>(<span class="string">"\nStarting training...\n"</span>)
+<span class="builtin">print</span>(<span class="string">"\nTraining RNN...\n"</span>)
+history_rnn = model_rnn.fit(
+    X_train_pad, y_train,
+    epochs=EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_data=(X_val_pad, y_val),
+    callbacks=[rnn_ckpt, reduce_lr_rnn],
+    verbose=<span class="number">0</span>
+)
+
+<span class="builtin">print</span>(<span class="string">"\nTraining LSTM...\n"</span>)
+history_lstm = model_lstm.fit(
+    X_train_pad, y_train,
+    epochs=EPOCHS,
+    batch_size=BATCH_SIZE,
+    validation_data=(X_val_pad, y_val),
+    callbacks=[lstm_ckpt, reduce_lr_lstm],
+    verbose=<span class="number">0</span>
+)
+<span class="builtin">print</span>(<span class="string">"\nTraining completed."</span>)
+
+<span class="comment"># Loading Best Models</span>
+best_rnn  = load_model(<span class="string">"best_rnn.keras"</span>)
+best_lstm = load_model(<span class="string">"best_lstm.keras"</span>)
+<span class="builtin">print</span>(<span class="string">"\nBest models loaded for both RNN and LSTM."</span>)</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content">
+						<div class="training-output">
+							<pre>Starting training...
+
+Training RNN...
+
+Training LSTM...
+
+Training completed.
+
+Best models loaded for both RNN and LSTM.</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 7: Model Evaluation -->
+			<div class="notebook-cell" data-cell="7" data-step="7">
+				<div class="cell-header">
+					<span class="cell-label">Step 7: Model Evaluation</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<div class="cell-code">
+					<pre><code class="language-python"><span class="comment"># Model Evaluation</span>
+
+<span class="comment"># Accuracy</span>
+<span class="builtin">print</span>(<span class="string">"\nFinal Accuracies-"</span>)
+<span class="builtin">print</span>(<span class="string">"\n========= SIMPLE RNN ========="</span>)
+<span class="builtin">print</span>(<span class="string">f"Train Accuracy : {history_rnn.history['accuracy'][-1]*100:.2f}%"</span>)
+<span class="builtin">print</span>(<span class="string">f"Val Accuracy   : {best_rnn.evaluate(X_val_pad, y_val, verbose=0)[1]*100:.2f}%"</span>)
+<span class="builtin">print</span>(<span class="string">f"Test Accuracy  : {best_rnn.evaluate(X_test_pad, y_test, verbose=0)[1]*100:.2f}%"</span>)
+
+<span class="builtin">print</span>(<span class="string">"\n========= LSTM ========="</span>)
+<span class="builtin">print</span>(<span class="string">f"Train Accuracy : {history_lstm.history['accuracy'][-1]*100:.2f}%"</span>)
+<span class="builtin">print</span>(<span class="string">f"Val Accuracy   : {best_lstm.evaluate(X_val_pad, y_val, verbose=0)[1]*100:.2f}%"</span>)
+<span class="builtin">print</span>(<span class="string">f"Test Accuracy  : {best_lstm.evaluate(X_test_pad, y_test, verbose=0)[1]*100:.2f}%"</span>)
+
+<span class="comment"># Classification Report</span>
+<span class="builtin">print</span>(<span class="string">"\nFinal Classification Reports-"</span>)
+<span class="builtin">print</span>(<span class="string">"\n========= RNN Classification Report ========="</span>)
+<span class="builtin">print</span>(classification_report(y_test, y_pred_rnn, digits=<span class="number">4</span>))
+
+<span class="builtin">print</span>(<span class="string">"\n========= LSTM Classification Report ========="</span>)
+<span class="builtin">print</span>(classification_report(y_test, y_pred_lstm, digits=<span class="number">4</span>))</code></pre>
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content">
+						<div class="evaluation-results">
+							<h4>Final Accuracies</h4>
+							<div class="accuracy-comparison">
+								<div class="accuracy-card rnn">
+									<h5>Simple RNN</h5>
+									<div class="accuracy-item"><span>Train Accuracy:</span> <strong>90.76%</strong>
+									</div>
+									<div class="accuracy-item"><span>Val Accuracy:</span> <strong>79.47%</strong></div>
+									<div class="accuracy-item"><span>Test Accuracy:</span> <strong>78.87%</strong></div>
+								</div>
+								<div class="accuracy-card lstm">
+									<h5>LSTM</h5>
+									<div class="accuracy-item"><span>Train Accuracy:</span> <strong>96.17%</strong>
+									</div>
+									<div class="accuracy-item"><span>Val Accuracy:</span> <strong>87.33%</strong></div>
+									<div class="accuracy-item"><span>Test Accuracy:</span> <strong>84.80%</strong></div>
+								</div>
+							</div>
+
+							<h4 style="margin-top: 20px;">Classification Reports</h4>
+							<div class="reports-grid">
+								<div class="report-card">
+									<h5>RNN Classification Report</h5>
+									<pre>              precision    recall  f1-score   support
+
+           0     0.7954    0.7773    0.7862       750
+           1     0.7823    0.8000    0.7910       750
+
+    accuracy                         0.7887      1500
+   macro avg     0.7888    0.7887    0.7886      1500
+weighted avg     0.7888    0.7887    0.7886      1500</pre>
+								</div>
+								<div class="report-card">
+									<h5>LSTM Classification Report</h5>
+									<pre>              precision    recall  f1-score   support
+
+           0     0.8329    0.8707    0.8514       750
+           1     0.8645    0.8253    0.8445       750
+
+    accuracy                         0.8480      1500
+   macro avg     0.8487    0.8480    0.8479      1500
+weighted avg     0.8487    0.8480    0.8479      1500</pre>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Cell 8: Visualization -->
+			<div class="notebook-cell" data-cell="8" data-step="8">
+				<div class="cell-header">
+					<span class="cell-label">Step 8: Graph Visualization</span>
+					<button class="run-btn">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M8 5v14l11-7z" />
+						</svg>
+						Run
+					</button>
+				</div>
+				<!-- Visualization Selection -->
+				<div class="param-selector">
+					<div class="param-group">
+						<label for="visualizationSelect">View Plots For:</label>
+						<select id="visualizationSelect" class="param-dropdown wide">
+							<option value="combined" selected>Combined (RNN & LSTM)</option>
+							<option value="lstm">LSTM Only</option>
+							<option value="rnn">RNN Only</option>
+						</select>
+					</div>
+				</div>
+				<div class="cell-code" id="visualizationCodeContainer">
+					<!-- Code will be dynamically updated based on visualization selection -->
+				</div>
+				<div class="cell-output hidden">
+					<div class="output-label">Output:</div>
+					<div class="output-content">
+						<div id="visualizationContainer">
+							<!-- Visualization images will be loaded here by JS -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Completion message -->
+			<div class="completion-message hidden" id="completionMessage">
+				<div class="completion-icon">🎉</div>
+				<div class="completion-text">
+					<h3>Experiment Completed!</h3>
+					<p>You have successfully trained and compared RNN and LSTM models for sentiment analysis on the
+						Stanford IMDb dataset. The LSTM model achieved higher accuracy (84.80%) compared to the RNN
+						(78.87%)
+						on the test set, demonstrating the advantages of LSTM's ability to capture long-term
+						dependencies.</p>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<!-- Loading Overlay -->
+	<div class="loading-overlay hidden" id="loadingOverlay">
+		<div class="loading-spinner"></div>
+		<div class="loading-text">Executing...</div>
+	</div>
+
+	<script src="./js/data.js"></script>
+	<script src="./js/main.js"></script>
 </body>
+
 </html>

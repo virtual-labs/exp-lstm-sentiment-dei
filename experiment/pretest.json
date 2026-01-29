@@ -2,37 +2,173 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "What is Sentiment Analysis?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Identifying the genre of a movie",
+        "b": "Detecting emotions or opinions expressed in text",
+        "c": "Translating text from one language to another",
+        "d": "Compressing text documents"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect because sentiment analysis focuses on opinion or emotion, not genre classification.",
+        "b": "Correct because sentiment analysis determines whether the sentiment in text is positive or negative.",
+        "c": "Incorrect because translation is a different NLP task.",
+        "d": "Incorrect because sentiment analysis does not deal with data compression."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In sentiment analysis, a movie review labelled as “1” usually indicates:",
+      "answers": {
+        "a": "Neutral sentiment",
+        "b": "Negative review",
+        "c": "Positive review",
+        "d": "Unlabelled data"
+      },
+      "explanations": {
+        "a": "Incorrect because this experiment considers only binary sentiment classes.",
+        "b": "Incorrect because negative sentiment is usually encoded as 0.",
+        "c": "Correct because in binary sentiment classification, 1 represents a positive review.",
+        "d": "Incorrect because labels are predefined in supervised learning."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why are movie reviews challenging for sentiment analysis?",
+      "answers": {
+        "a": "Long-range dependencies and negations affect meaning",
+        "b": "Sentiment depends only on individual words",
+        "c": "Reviews always have fixed length",
+        "d": "Reviews contain only numerical data"
+      },
+      "explanations": {
+        "a": "Correct because context and negation can completely change sentiment.",
+        "b": "Incorrect because sentiment often depends on context and word order.",
+        "c": "Incorrect because reviews vary greatly in length.",
+        "d": "Incorrect because reviews are text-based."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "What is the main limitation of a simple Recurrent Neural Network (RNN)?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "It cannot process sequential data",
+        "b": "It suffers from vanishing and exploding gradient problems",
+        "c": "It requires labelled image data",
+        "d": "It cannot be trained using backpropagation"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect because RNNs are designed for sequential data.",
+        "b": "Correct because this limits the ability of RNNs to learn long-term dependencies.",
+        "c": "Incorrect because RNNs are used for sequence data, not necessarily images.",
+        "d": "Incorrect because RNNs are trained using backpropagation through time."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the primary purpose of gates in an LSTM network?",
+      "answers": {
+        "a": "To increase the number of neurons",
+        "b": "To randomly drop connections",
+        "c": "To convert text into numerical vectors",
+        "d": "To control what information is stored, forgotten, and output"
+      },
+      "explanations": {
+        "a": "Incorrect because gates control information flow, not network size.",
+        "b": "Incorrect because dropout is a separate regularization technique.",
+        "c": "Incorrect because tokenization and embeddings handle that task.",
+        "d": "Correct because LSTM gates regulate memory flow in the cell state."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which dataset is commonly used for benchmarking sentiment analysis models?",
+      "answers": {
+        "a": "MNIST",
+        "b": "CIFAR-10",
+        "c": "IMDB Movie Reviews Dataset",
+        "d": "ImageNet"
+      },
+      "explanations": {
+        "a": "Incorrect because MNIST is used for handwritten digit recognition.",
+        "b": "Incorrect because CIFAR-10 is an image classification dataset.",
+        "c": "Correct because IMDB is a standard dataset for binary sentiment classification.",
+        "d": "Incorrect because ImageNet is used for large-scale image classification."
       },
       "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Sentiment analysis is an example of which type of learning?",
+      "answers": {
+        "a": "Unsupervised learning",
+        "b": "Reinforcement learning",
+        "c": "Supervised learning",
+        "d": "Self-supervised learning"
+      },
+      "explanations": {
+        "a": "Incorrect because sentiment labels are provided during training.",
+        "b": "Incorrect because there is no reward-based interaction.",
+        "c": "Correct because the model learns from labelled positive and negative reviews.",
+        "d": "Incorrect because explicit labels are used."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does the term “binary classification” mean in this experiment?",
+      "answers": {
+        "a": "Classifying data into two distinct classes",
+        "b": "Predicting numerical values",
+        "c": "Classifying text into multiple categories",
+        "d": "Clustering text documents"
+      },
+      "explanations": {
+        "a": "Correct because reviews are classified as positive or negative.",
+        "b": "Incorrect because outputs are class labels, not continuous values.",
+        "c": "Incorrect because only two sentiment classes are considered.",
+        "d": "Incorrect because clustering is an unsupervised task."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why is word order important in sentiment analysis?",
+      "answers": {
+        "a": "Because models ignore punctuation",
+        "b": "Because sentiment depends on context and sequence of words",
+        "c": "Because reversing words does not change meaning",
+        "d": "Because all words have equal importance"
+      },
+      "explanations": {
+        "a": "Incorrect because punctuation handling does not define sentiment.",
+        "b": "Correct because phrases like “not good” and “good” have opposite meanings.",
+        "c": "Incorrect because word order can completely change sentiment.",
+        "d": "Incorrect because some words influence sentiment more than others."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why is the IMDB dataset suitable for LSTM-based sentiment analysis?",
+      "answers": {
+        "a": "It contains only short sentences",
+        "b": "It is balanced and contains long text sequences",
+        "c": "It has image and text data combined",
+        "d": "It requires no preprocessing"
+      },
+      "explanations": {
+        "a": "Incorrect because reviews vary in length.",
+        "b": "Correct because LSTMs handle long-term dependencies well.",
+        "c": "Incorrect because the dataset contains only text.",
+        "d": "Incorrect because text preprocessing is necessary."
+      },
+      "correctAnswer": "b",
       "difficulty": "beginner"
     }
   ]
