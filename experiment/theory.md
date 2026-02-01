@@ -47,8 +47,8 @@ where,
 - *h<sub>t-1</sub>* is the hidden state from the previous time step.
 - *W<sub>h</sub>*, *U<sub>h</sub>*, and *W<sub>y</sub>* are weight matrices.
 - *b<sub>h</sub>* and *b<sub>y</sub>* are bias vectors.
-- *tanh* is the hyperbolic tangent activation function.
-- *σ* denotes the sigmoid activation function used for binary classification.
+- *tanh()* is the hyperbolic tangent activation function.
+- *σ()* denotes the sigmoid activation function used for binary classification.
 
 **Limitations of RNNs:**
 Despite their conceptual simplicity and ability to model sequences, standard RNNs suffer from several well-known limitations:
@@ -56,7 +56,7 @@ Despite their conceptual simplicity and ability to model sequences, standard RNN
 2.  **Difficulty in Learning Long-Term Dependencies:** Due to unstable gradient flow, simple RNNs tend to focus only on recent inputs and fail to retain information from earlier time steps, especially in long sequences such as movie reviews.
 3.  **Unstable Training Dynamics:** Training deep or long RNNs often requires careful initialization, gradient clipping, and learning rate tuning to prevent divergence.
 
-These limitations motivated the development of more advanced recurrent architectures such as Long Short-Term Memory (LSTM) networks.
+These limitations motivated the development of more advanced recurrent architectures such as Long Short-Term Memory (LSTM) networks, which introduce gating mechanisms to regulate information flow and improve long-term memory retention.
 
 ---
 
@@ -89,11 +89,12 @@ LSTM is a specialized RNN architecture designed to overcome the limitations of s
     
     **h<sub>t</sub> = o<sub>t</sub> · tanh(C<sub>t</sub>)**
 
-The neural network architecture for an LSTM block generally demonstrates that the LSTM network extends RNN's memory and can selectively remember or forget information by structures called cell states and three gates. Thus, in addition to a hidden state in RNN, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
+The neural network architecture for an LSTM block given in Figure 1 demonstrates that the LSTM network extends RNN's memory and can selectively remember or forget information by structures called cell states and three gates. Thus, in addition to a hidden state in RNN, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
 
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
-**Fig. 1.** Architecture of LSTM. Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
+**Fig. 1.** Architecture of LSTM.
+Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
 
 
 The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous LSTM unit, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to generate a newly predicted value. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
@@ -106,7 +107,7 @@ The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the 
 -   **Effective Memory Management:** The use of forget, input, and output gates allows LSTM to selectively store, update, or discard information, leading to better sequence modelling.
 -   **Suitable for Sequential Data:** LSTMs perform well on time-series, text, speech, and sentiment analysis tasks where data has temporal dependencies.
 -   **Stable Training:** Due to controlled gradient flow through the cell state, LSTMs provide more stable training compared to simple RNNs.
--   **Better Performance on Contextual Tasks:** LSTMs capture contextual information over longer sequences, improving performance in tasks such as language modelling and classification.
+-   **Better Performance on Contextual Tasks:** LSTMs capture contextual information over longer sequences, improving performance in tasks such as language modelling and text classification.
 
 #### Demerits of Long Short-Term Memory
 
