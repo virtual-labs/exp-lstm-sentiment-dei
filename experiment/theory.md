@@ -94,6 +94,7 @@ The neural network architecture for an LSTM block given in Figure 1 demonstrates
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
 **Fig. 1.** Architecture of LSTM.
+
 Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
 
 
