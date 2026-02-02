@@ -8,7 +8,7 @@
 | SNo. | Name | Email | Institute | ID |
 | :---: | :---: | :---: | :---: | :---: |
 | 1 | Shubhi Gupta | shubhigupta4104@gmail.com | Dayalbagh Educational Institute | 1 |
-| 2 | Ami Arora | amiarora18@gmail.com | Dayalbagh Educational Institute | 2 |
-| 3 | Shobha Rawat | shobhar9457@gmail.com | Dayalbagh Educational Institute | 3 |
+| 2 | Shobha Rawat | shobhar9457@gmail.com | Dayalbagh Educational Institute | 2 |
+| 3 | Ami Arora | amiarora18@gmail.com | Dayalbagh Educational Institute | 3 |
 | 4 | Adbhut Satsangi | adbhut.rei.2233@gmail.com | Dayalbagh Educational Institute | 4 |
 | 5 | Shabd Sahni | shabdsahni2005@gmail.com | Dayalbagh Educational Institute | 5 |

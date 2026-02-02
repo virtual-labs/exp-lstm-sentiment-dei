@@ -13,7 +13,8 @@
    The cleaned dataset is divided into three subsets:
    - **Training set** for learning model parameters.
    - **Validation set** for hyperparameter tuning and model selection.
-   Test set for final performance evaluation.
+   - **Test set** for final performance evaluation.
+
    The split is performed in a balanced manner to maintain equal representation of positive and negative reviews.
 
 5. **Text Tokenization:**
