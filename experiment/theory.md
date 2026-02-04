@@ -58,13 +58,13 @@ An LSTM cell consists of several interacting components that regulate the flow o
 The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM
 networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
 
-The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous LSTM unit, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to generate a newly predicted value. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
+The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
 **Fig. 1.** Architecture of LSTM.
 
-Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
+(Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
 
 Due to these properties, LSTMs are widely used in applications such as sentiment analysis, machine translation, speech recognition, and time-series forecasting, where understanding long-range dependencies is critical for accurate predictions.
 
