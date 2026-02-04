@@ -1,15 +1,19 @@
 ### Theory
 
 #### Introduction to Sentiment Analysis
-Sentiment Analysis is a supervised natural language processing (NLP) task that determines the emotional polarity (positive or negative) expressed in text. It is widely used in applications such as opinion mining, recommendation systems, and social media analysis.
+Sentiment Analysis is a supervised Natural Language Processing (NLP) task that aims to automatically identify and classify the emotional polarity expressed in textual data. The most common form of sentiment analysis focuses on determining whether a given text conveys a positive or negative sentiment. This task plays a crucial role in applications such as opinion mining, customer feedback analysis, recommendation systems, market analysis, and social media monitoring.
 
-In this experiment, sentiment analysis is formulated as a binary classification problem:
+In this experiment, sentiment analysis is formulated as a binary classification problem, where the objective is to predict the sentiment label of a movie review based on its textual content:
 
 **y ∈ {0, 1}**
 
 where,
-- **0** = Negative review
-- **1** = Positive review
+- **0** represents a Negative review,
+- **1** represents a Positive review.
+
+Since textual data is inherently sequential, capturing word order and contextual dependencies is
+essential for accurate sentiment prediction. Recurrent Neural Networks (RNNs) and their advanced
+variants, such as Long Short-Term Memory (LSTM) networks, are particularly well-suited for this task.
 
 ---
 
@@ -23,27 +27,27 @@ Unlike standard RNNs, which rely solely on a single hidden state, LSTMs introduc
 
 An LSTM cell consists of several interacting components that regulate the flow of information using gating mechanisms. These gates are implemented using sigmoid and tanh activation functions, which enable fine-grained control over memory updates.
 
-1.  **Forget Gate (f<sub>t</sub>):** It decides the type of information that should be thrown away or kept from the cell state. This process is implemented by a sigmoid activation function.
+1.  **Forget Gate (f<sub>t</sub>):** The forget gate determines which information from the previous cell state should be retained or discarded. This process is implemented by a sigmoid activation function. The decision is based on the previous hidden state and the current input. The output of the forget gate is a vector of values between 0 and 1, where values close to 0 indicate information to be forgotten, and values close to 1 indicate information to be retained.
     
     **f<sub>t</sub> = σ(W<sub>f</sub>[h<sub>t-1</sub>, p<sub>t</sub>] + b<sub>f</sub>)**
 
-2.  **Input Gate (i<sub>t</sub>):** It controls what new information will be added to the cell state from the current input. This gate also plays the role to protect the memory contents from perturbation by irrelevant input.
+2.  **Input Gate (i<sub>t</sub>):** The input gate controls the extent to which new information from the current input should be written to the cell state. This gate protects the memory from being corrupted by irrelevant or noisy inputs and ensures that only meaningful information is incorporated.
     
     **i<sub>t</sub> = σ(W<sub>i</sub>[h<sub>t-1</sub>, p<sub>t</sub>] + b<sub>i</sub>)**
 
-3.  **Candidate Cell State (C̃<sub>t</sub>):** This is the key to LSTMs and represents the memory of LSTM networks. The LSTM block removes or adds information to the cell state through the gates, which allow optional information to cross.
+3.  **Candidate Cell State (C̃<sub>t</sub>):** The candidate cell state is the key to LSTMs and represents the memory of LSTM networks. It represents new information that could potentially be added to the memory. The LSTM block removes or adds information to the cell state through the gates, which allow optional information to cross.
     
     **C̃<sub>t</sub> = tanh(W<sub>c</sub>[h<sub>t-1</sub>, p<sub>t</sub>] + b<sub>c</sub>)**
 
-4.  **Cell State Update (C<sub>t</sub>):** This additive update mechanism allows gradients to flow across long sequences, enabling long-term dependency learning.
+4.  **Cell State Update (C<sub>t</sub>):** The cell state update combines the retained information from the previous cell state with the newly generated candidate information. This additive update mechanism is a key innovation of LSTM networks, as it allows gradients to flow across long sequences without rapid decay, enabling effective learning of long-term dependencies.
     
     **C<sub>t</sub> = f<sub>t</sub> · C<sub>t-1</sub> + i<sub>t</sub> · C̃<sub>t</sub>**
 
-5.  **Output Gate (o<sub>t</sub>):** It controls which information to reveal from the updated cell state (C<sub>t</sub>) to the output in a single time step. In other words, the output gate determines what the value of the next hidden state should be in each time step.
+5.  **Output Gate (o<sub>t</sub>):** The output gate determines which part of the updated cell state should be exposed as the hidden state for the current time step. This allows the LSTM to control how much of its internal memory influences the output.
     
     **o<sub>t</sub> = σ(W<sub>o</sub>[h<sub>t-1</sub>, p<sub>t</sub>] + b<sub>o</sub>)**
 
-6.  **Hidden State (h<sub>t</sub>):** The hidden state represents the output of the LSTM cell at time step *t*. It is computed by applying a non-linear transformation to the updated cell state and modulating it with the output gate.
+6.  **Hidden State (h<sub>t</sub>):** The hidden state represents the final output of the LSTM cell at time step t. It is obtained by applying a tanh activation to the updated cell state and modulating it with the output gate.
     
     **h<sub>t</sub> = o<sub>t</sub> · tanh(C<sub>t</sub>)**
 
@@ -51,7 +55,8 @@ An LSTM cell consists of several interacting components that regulate the flow o
 
 #### LSTM Architecture & Information Flow-
 
-The neural network architecture for an LSTM block given in Figure 1 demonstrates that the LSTM network extends RNN's memory and can selectively remember or forget information by structures called cell states and three gates. Thus, in addition to a hidden state in RNN, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
+The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM
+networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
 
 The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous LSTM unit, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to generate a newly predicted value. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
