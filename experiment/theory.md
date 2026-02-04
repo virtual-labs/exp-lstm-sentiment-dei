@@ -13,57 +13,15 @@ where,
 
 ---
 
-#### Dataset Description - IMDB Movie Reviews
-The experiment uses a subset of the **IMDB Large Movie Review Dataset**, which is a widely used benchmark dataset for sentiment analysis. It is used due to its real-world text complexity and long-term dependency modelling.
-
-**Dataset characteristics:**
-- Total reviews: 50,000 (original dataset).
-- Binary sentiment labels: positive and negative.
-- Reviews are pre-labelled and evenly balanced.
-
-**Subset used in this experiment:**
-- **Training + Validation:** 8,500 reviews.
-- **Test set:** 1,500 reviews.
-- Balanced distribution between positive and negative samples.
-
-**Movie reviews are particularly challenging because:**
-- Sentiment may depend on long-range word dependencies.
-- Negations and context significantly affect meaning.
-- Reviews vary greatly in length.
-
-Hence, sequential models such as RNNs and LSTMs are well suited for this task.
-
----
-
-#### Recurrent Neural Networks (RNNs)
-Recurrent Neural Networks process sequential data by maintaining a hidden state that captures information from previous time steps. For a simple RNN, the hidden state and output are computed as:
-
-**h<sub>t</sub> = tanh(W<sub>h</sub> p<sub>t</sub> + U<sub>h</sub> h<sub>t-1</sub> + b<sub>h</sub>)**
-
-**y<sub>t</sub> = σ(W<sub>y</sub> h<sub>t</sub> + b<sub>y</sub>)**
-
-where,
-- *p<sub>t</sub>* is the input vector at time step *t*.
-- *h<sub>t-1</sub>* is the hidden state from the previous time step.
-- *W<sub>h</sub>*, *U<sub>h</sub>*, and *W<sub>y</sub>* are weight matrices.
-- *b<sub>h</sub>* and *b<sub>y</sub>* are bias vectors.
-- *tanh()* is the hyperbolic tangent activation function.
-- *σ()* denotes the sigmoid activation function used for binary classification.
-
-**Limitations of RNNs:**
-Despite their conceptual simplicity and ability to model sequences, standard RNNs suffer from several well-known limitations:
-1.  **Vanishing and Exploding Gradient Problem:** During backpropagation through time (BPTT), gradients can either shrink exponentially (vanish) or grow uncontrollably (explode), making it difficult for the network to learn long-range dependencies.
-2.  **Difficulty in Learning Long-Term Dependencies:** Due to unstable gradient flow, simple RNNs tend to focus only on recent inputs and fail to retain information from earlier time steps, especially in long sequences such as movie reviews.
-3.  **Unstable Training Dynamics:** Training deep or long RNNs often requires careful initialization, gradient clipping, and learning rate tuning to prevent divergence.
-
-These limitations motivated the development of more advanced recurrent architectures such as Long Short-Term Memory (LSTM) networks, which introduce gating mechanisms to regulate information flow and improve long-term memory retention.
-
----
-
 #### Long Short-Term Memory (LSTM)
-LSTM is a specialized RNN architecture designed to overcome the limitations of standard RNNs by introducing gating mechanisms. It was introduced by Hochreiter and Schmidhuber in 1997 with the explicit purpose of helping address the unstable gradient problem. The gates allow LSTM to retain relevant information and discard irrelevant data over long sequences.
+Long Short-Term Memory (LSTM) is a specialized type of Recurrent Neural Network (RNN) designed to
+overcome the key limitations of traditional RNNs, particularly the vanishing and exploding gradient problems. LSTM networks were introduced by Hochreiter and Schmidhuber in 1997 with the explicit goal of enabling neural networks to learn and retain long-term dependencies in sequential data.
+
+Unlike standard RNNs, which rely solely on a single hidden state, LSTMs introduce an internal cell state that acts as a memory pipeline. This cell state allows information to flow across time steps with minimal modification, making it easier for gradients to propagate during backpropagation through time (BPTT). As a result, LSTMs are capable of remembering important contextual information over long sequences while selectively forgetting irrelevant details.
 
 **LSTM Cell Components:**
+
+An LSTM cell consists of several interacting components that regulate the flow of information using gating mechanisms. These gates are implemented using sigmoid and tanh activation functions, which enable fine-grained control over memory updates.
 
 1.  **Forget Gate (f<sub>t</sub>):** It decides the type of information that should be thrown away or kept from the cell state. This process is implemented by a sigmoid activation function.
     
@@ -89,7 +47,13 @@ LSTM is a specialized RNN architecture designed to overcome the limitations of s
     
     **h<sub>t</sub> = o<sub>t</sub> · tanh(C<sub>t</sub>)**
 
+---
+
+#### LSTM Architecture & Information Flow-
+
 The neural network architecture for an LSTM block given in Figure 1 demonstrates that the LSTM network extends RNN's memory and can selectively remember or forget information by structures called cell states and three gates. Thus, in addition to a hidden state in RNN, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
+
+The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous LSTM unit, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to generate a newly predicted value. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
@@ -97,8 +61,7 @@ The neural network architecture for an LSTM block given in Figure 1 demonstrates
 
 Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen).
 
-
-The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous LSTM unit, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to generate a newly predicted value. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
+Due to these properties, LSTMs are widely used in applications such as sentiment analysis, machine translation, speech recognition, and time-series forecasting, where understanding long-range dependencies is critical for accurate predictions.
 
 ---
 
