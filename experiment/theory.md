@@ -56,7 +56,7 @@ An LSTM cell consists of several interacting components that regulate the flow o
 #### LSTM Architecture & Information Flow-
 
 The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM
-networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block typically has four more layers. These layers are called the cell state (C<sub>t</sub>), an input gate (i<sub>t</sub>), an output gate (o<sub>t</sub>), and a forget gate (f<sub>t</sub>). Each layer interacts with each other in a very special way to generate information from the training data.
+networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block introduces four additional components: the cell state (C<sub>t</sub>), forget gate (f<sub>t</sub>),input gate (i<sub>t</sub>), and output gate (o<sub>t</sub>), These components interact in a carefully designed manner to regulate the flow of information across time steps. 
 
 The *p<sub>t</sub>*, *h<sub>t-1</sub>*, and *C<sub>t-1</sub>* correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
