@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSTM Interactive Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <!-- Tab Navigation -->
+    <nav class="tab-navigation">
+        <div class="logo">LSTM <span>Simulator</span></div>
+        <button class="tab-btn active" data-tab="sim1">1. Memory Loss</button>
+        <button class="tab-btn" data-tab="sim2">2. LSTM Cell</button>
+        <button class="tab-btn" data-tab="sim3">3. Sentiment</button>
+        <button class="tab-btn" data-tab="sim4">4. Training</button>
+        <button class="tab-btn" data-tab="sim5">5. Attribution</button>
+        <button class="tab-btn" data-tab="sim6">6. Comparison</button>
+        <a href="../index.html" class="btn-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5" />
+                <path d="M12 19l-7-7 7-7" />
+            </svg>
+            Back to Home
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- ─── SIM 1: Memory Loss ─── -->
+        <div id="sim1" class="tab-content active">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Sequence Unrolling</h2>
+                    <p>See how a single RNN cell is reused across every timestep and how memory fades.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Weight Sharing:</strong> The same weights (W, b) are shared at every step.</li>
+                            <li><strong>Hidden State (h<sub>t</sub>):</strong> Flows from left to right, carrying
+                                context.</li>
+                            <li><strong>Update Rule:</strong> h<sub>t</sub> = tanh(W·[h<sub>t-1</sub>, p<sub>t</sub>] +
+                                b)</li>
+                        </ul>
+                    </div>
+
+                    <h3>How to Use</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Input:</strong> Type a sentence to see it unrolled.</li>
+                            <li><strong>Sliders:</strong> Adjust RNN Decay vs LSTM Forget Bias to see the difference in
+                                memory retention.</li>
+                            <li><strong>Pulse:</strong> Click "Run Backprop Pulse" to visualize gradient flow.</li>
+                        </ul>
+                    </div>
+
+                    <h3>What to Observe</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li>RNN memory fades quickly (darker cells)</li>
+                            <li>LSTM maintains stronger gradients (brighter cells)</li>
+                            <li>Higher forget bias = better long-term memory</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card enhanced-sim">
+                        <div class="experiment-layout">
+                            <div class="main-controls">
+                                <div class="input-group">
+                                    <label>Experiment Input:</label>
+                                    <input type="text" id="sim1-input"
+                                        value="The movie started great but the ending was terrible"
+                                        placeholder="Enter sentence...">
+                                </div>
+                                <div class="control-grid">
+                                    <div class="param-slider">
+                                        <label>RNN Alpha (Decay Rate): <span id="val-rnn-alpha">0.85</span></label>
+                                        <input type="range" id="rnn-alpha-slider" min="50" max="99" value="85">
+                                    </div>
+                                    <div class="param-slider">
+                                        <label>LSTM Forget Bias: <span id="val-lstm-bias">0.98</span></label>
+                                        <input type="range" id="lstm-bias-slider" min="90" max="100" value="98">
+                                    </div>
+                                </div>
+                                <div class="action-row">
+                                    <div class="toggle-group">
+                                        <button class="active" onclick="setSim1Model('rnn')">RNN</button>
+                                        <button onclick="setSim1Model('lstm')">LSTM</button>
+                                        <button onclick="setSim1Model('both')">Both</button>
+                                    </div>
+                                    <button class="action-btn secondary" onclick="runBackpropPulse()">Run Backprop Pulse
+                                        ⚡</button>
+                                    <button id="stress-test-btn" class="action-btn ghost"
+                                        onclick="loadStressTest()">Stress Test (30+ Words)</button>
+                                </div>
+                            </div>
+
+                            <div class="analytics-panel">
+                                <h3>Analytics: Retention Strength</h3>
+                                <div class="chart-wrapper">
+                                    <canvas id="retentionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sim1-viz" class="viz-container">
+                            <div class="timeline-row rnn-row">
+                                <span class="row-label">RNN Gradient Flow</span>
+                                <div id="rnn-timeline" class="timeline"></div>
+                            </div>
+                            <div class="timeline-row lstm-row">
+                                <span class="row-label">LSTM Gradient Flow</span>
+                                <div id="lstm-timeline" class="timeline"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <button class="reset-btn" onclick="resetSim1()" title="Reset Simulation">↺ Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIM 2: LSTM Cell ─── -->
+        <div id="sim2" class="tab-content">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Inside the LSTM Cell</h2>
+                    <p>A microscopic view of the internal gates that make LSTMs powerful.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Forget Gate:</strong> f<sub>t</sub> = σ(W<sub>f</sub>·[h<sub>t-1</sub>,
+                                p<sub>t</sub>] + b<sub>f</sub>)</li>
+                            <li><strong>Input Gate:</strong> i<sub>t</sub> = σ(W<sub>i</sub>·[h<sub>t-1</sub>,
+                                p<sub>t</sub>] + b<sub>i</sub>)</li>
+                            <li><strong>Candidate Cell:</strong> C̃<sub>t</sub> = tanh(W<sub>c</sub>·[h<sub>t-1</sub>,
+                                p<sub>t</sub>] + b<sub>c</sub>)</li>
+                            <li><strong>Cell Update:</strong> C<sub>t</sub> = f<sub>t</sub>⊙C<sub>t-1</sub> +
+                                i<sub>t</sub>⊙C̃<sub>t</sub></li>
+                            <li><strong>Output Gate:</strong> o<sub>t</sub> = σ(W<sub>o</sub>·[h<sub>t-1</sub>,
+                                p<sub>t</sub>] + b<sub>o</sub>)</li>
+                            <li><strong>Hidden State:</strong> h<sub>t</sub> = o<sub>t</sub>⊙tanh(C<sub>t</sub>)</li>
+                        </ul>
+                    </div>
+
+                    <h3>How to Use</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Sliders:</strong> Manually adjust gate activations to see how they affect the
+                                output.</li>
+                            <li><strong>Inject:</strong> Add positive/negative words to see how the cell reacts.</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card gate-playground">
+                        <div class="sim-card enhanced-sim">
+                            <div class="experiment-layout">
+                                <div class="main-controls">
+                                    <div class="gate-area">
+                                        <div class="gate-grid">
+                                            <div class="gate-slider">
+                                                <label>Forget Gate (σ): <span id="val-forget-gate">70%</span></label>
+                                                <input type="range" id="forget-gate" min="0" max="100" value="70">
+                                                <p class="gate-desc">Decides how much of C<sub>t-1</sub> to keep.</p>
+                                            </div>
+                                            <div class="gate-slider">
+                                                <label>Input Gate (σ · tanh): <span
+                                                        id="val-input-gate">50%</span></label>
+                                                <input type="range" id="input-gate" min="0" max="100" value="50">
+                                                <p class="gate-desc">Decides what new info to store in C<sub>t</sub>.
+                                                </p>
+                                            </div>
+                                            <div class="gate-slider">
+                                                <label>Output Gate (σ): <span id="val-output-gate">80%</span></label>
+                                                <input type="range" id="output-gate" min="0" max="100" value="80">
+                                                <p class="gate-desc">Filters the output h<sub>t</sub> from
+                                                    C<sub>t</sub>.</p>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="pos-btn" onclick="injectSentiment('pos')">Inject Positive
+                                                Word</button>
+                                            <button class="neg-btn" onclick="injectSentiment('neg')">Inject Negative
+                                                Word</button>
+                                        </div>
+                                    </div>
+                                    <div class="process-log-container">
+                                        <h3>Word-to-Vector Pipeline</h3>
+                                        <div id="pipeline-log" class="pipeline-log">
+                                            <div class="log-entry placeholder">Waiting for input...</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lstm-cell-svg-container" class="cell-viz-container">
+                                    <!-- SVG will be injected here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <button class="reset-btn" onclick="resetSim2()" title="Reset Simulation">↺ Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIM 3: Sentiment Timeline ─── -->
+        <div id="sim3" class="tab-content">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Sentiment Timeline</h2>
+                    <p>Visualize how RNN and LSTM accumulate sentiment word-by-word through a sentence.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Accumulation:</strong> Each word shifts the running sentiment score.</li>
+                            <li><strong>Negation:</strong> Words like "not" flip the polarity of the next word.</li>
+                            <li><strong>Stability:</strong> LSTM smooths out fluctuation; RNN oscillates sharply.</li>
+                        </ul>
+                    </div>
+
+                    <h3>How to Use</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Edit:</strong> Type any sentence to see live sentiment curves.</li>
+                            <li><strong>Toggle:</strong> Switch between RNN and LSTM models.</li>
+                            <li><strong>Insert "not":</strong> Add negation to see polarity flip.</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card">
+                        <div class="sim-controls" style="margin-bottom:1.5rem;">
+                            <div class="input-group" style="margin-bottom:1rem;">
+                                <label>Sentence Input:</label>
+                                <input type="text" id="sim3-input"
+                                    value="I thought the movie would be good but it was disappointing">
+                            </div>
+                            <div class="action-row">
+                                <div class="model-toggles">
+                                    <button class="toggle-btn rnn active" onclick="toggleSim3Model('rnn')">RNN</button>
+                                    <button class="toggle-btn lstm active"
+                                        onclick="toggleSim3Model('lstm')">LSTM</button>
+                                </div>
+                                <button class="action-btn secondary" onclick="insertNot()">Insert "not"</button>
+                                <button class="action-btn" onclick="processSim3Animated()">▶ Animate</button>
+                            </div>
+                        </div>
+                        <div class="viz-row">
+                            <div class="chart-container">
+                                <canvas id="sentimentChart"></canvas>
+                            </div>
+                            <div class="gauge-container">
+                                <h4>Final Prediction</h4>
+                                <div class="gauge-wrapper">
+                                    <div class="gauge-semicircle">
+                                        <div class="gauge-needle" id="gauge-needle"></div>
+                                    </div>
+                                    <div class="gauge-labels">
+                                        <span>Negative</span>
+                                        <span class="gauge-value" id="gauge-value">0.00</span>
+                                        <span>Positive</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="heatmap-section" style="margin-top:1.5rem;">
+                            <div class="heatmap-title-group">
+                                <h3>Word Influence Heatmap</h3>
+                                <p class="small-hint">Click any word to see its contribution</p>
+                            </div>
+                            <div id="sim3-heatmap" class="heatmap"></div>
+                            <div id="sim3-tooltip" class="word-tooltip" style="display:none;"></div>
+                        </div>
+                        <div class="educational-note" style="margin-top:1.5rem;">
+                            <strong>📝 Key Insight:</strong> Word order matters in sentiment analysis. The word "not"
+                            before "good" flips the sentiment entirely. LSTMs handle this through their gating
+                            mechanism, while RNNs struggle to maintain context over longer distances.
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <button class="reset-btn" onclick="resetSim3()" title="Reset Simulation">↺ Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIM 4: Training Dynamics ─── -->
+        <div id="sim4" class="tab-content">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Training Dynamics</h2>
+                    <p>Compare how RNN and LSTM converge over 150 training epochs.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Overfitting:</strong> Training accuracy rises while validation plateaus.</li>
+                            <li><strong>Vanishing Gradient:</strong> RNN gradient bars shrink over time.</li>
+                            <li><strong>Convergence:</strong> LSTM achieves smoother, higher validation accuracy.</li>
+                        </ul>
+                    </div>
+
+                    <h3>Experiment Parameters</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li>Epochs: 150</li>
+                            <li>Batch Size: 128</li>
+                            <li>Optimizer: Adam</li>
+                            <li>LR RNN: 3e-5 | LR LSTM: 1e-5</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card">
+                        <div class="split-screen">
+                            <div class="lab-sidebar">
+                                <h3>Hyperparameters</h3>
+                                <div class="param-slider">
+                                    <label>Learning Rate: <span id="val-lr">3e-5</span></label>
+                                    <input type="range" id="sim4-lr" min="1" max="10" value="3" step="1">
+                                </div>
+                                <div class="param-slider">
+                                    <label>Batch Size:</label>
+                                    <select id="sim4-batch" class="sim4-select">
+                                        <option value="32">32</option>
+                                        <option value="64">64</option>
+                                        <option value="128" selected>128</option>
+                                        <option value="256">256</option>
+                                    </select>
+                                </div>
+                                <div class="param-slider">
+                                    <label>Sequence Length: <span id="val-seqlen">300</span></label>
+                                    <input type="range" id="sim4-seqlen" min="50" max="500" value="300" step="50">
+                                </div>
+                                <button class="action-btn" onclick="startSim4Training()"
+                                    style="width:100%;margin-top:1rem;">▶ Train Models</button>
+                                <div class="experiment-info" style="margin-top:1.5rem;">
+                                    <h4>Experiment Setup</h4>
+                                    <ul class="usage-list">
+                                        <li>Vocab Size: 10,000</li>
+                                        <li>Embed Dim: 256</li>
+                                        <li>RNN Units: 256</li>
+                                        <li>LSTM Units: 64</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="training-grids">
+                                <div class="model-column">
+                                    <h3 style="color:#ef4444;">RNN</h3>
+                                    <div class="chart-container"><canvas id="rnnLossChart"></canvas></div>
+                                    <div class="chart-container"><canvas id="rnnAccChart"></canvas></div>
+                                    <div class="grad-section">
+                                        <h4>Gradient Magnitude</h4>
+                                        <div class="progress-container">
+                                            <div class="progress-fill rnn-grad" id="rnn-grad-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="cm-section">
+                                        <h4>Confusion Matrix</h4>
+                                        <div class="cm-grid" id="rnn-cm"></div>
+                                    </div>
+                                </div>
+                                <div class="model-column">
+                                    <h3 style="color:#3b82f6;">LSTM</h3>
+                                    <div class="chart-container"><canvas id="lstmLossChart"></canvas></div>
+                                    <div class="chart-container"><canvas id="lstmAccChart"></canvas></div>
+                                    <div class="grad-section">
+                                        <h4>Gradient Magnitude</h4>
+                                        <div class="progress-container">
+                                            <div class="progress-fill lstm-grad" id="lstm-grad-bar"></div>
+                                        </div>
+                                    </div>
+                                    <div class="cm-section">
+                                        <h4>Confusion Matrix</h4>
+                                        <div class="cm-grid" id="lstm-cm"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="educational-note" style="margin-top:1.5rem;">
+                            <strong>📝 Key Insight:</strong> The RNN's gradient bars shrink over epochs (vanishing
+                            gradient), causing its validation accuracy to plateau around 79%. The LSTM maintains stable
+                            gradients through its cell state highway, converging smoothly to ~87% validation accuracy.
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <button class="reset-btn" onclick="resetSim4()" title="Reset Simulation">↺ Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIM 5: Feature Attribution ─── -->
+        <div id="sim5" class="tab-content">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Feature Attribution</h2>
+                    <p>Explore which words influence the model's prediction the most.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Saliency:</strong> Measures each word's gradient-based importance.</li>
+                            <li><strong>Local vs Global:</strong> RNN focuses locally; LSTM spreads influence.</li>
+                            <li><strong>Cell State:</strong> LSTM's internal memory trace over time.</li>
+                        </ul>
+                    </div>
+
+                    <h3>How to Use</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Toggle:</strong> Switch between RNN and LSTM attribution.</li>
+                            <li><strong>Threshold:</strong> Slide to hide low-importance words.</li>
+                            <li><strong>Compare:</strong> Use side-by-side mode for two sentences.</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card">
+                        <div class="top-bar">
+                            <div class="input-group" style="max-width:500px;">
+                                <label>Sentence A:</label>
+                                <input type="text" id="sim5-input-a"
+                                    value="The visuals were beautiful but the story was boring">
+                            </div>
+                            <div class="model-toggles">
+                                <button class="toggle-btn rnn active" onclick="toggleAttModel('rnn')">RNN</button>
+                                <button class="toggle-btn lstm active" onclick="toggleAttModel('lstm')">LSTM</button>
+                            </div>
+                        </div>
+                        <div class="param-slider" style="max-width:300px;margin-bottom:1.5rem;">
+                            <label>Saliency Threshold: <span id="val-threshold">0.10</span></label>
+                            <input type="range" id="sim5-threshold" min="0" max="50" value="10">
+                        </div>
+                        <h3>Word Attribution — Sentence A</h3>
+                        <div id="sim5-attribution-a" class="attribution-viz vertical"></div>
+                        <div class="cell-state-viz" id="cell-state-section-a">
+                            <h4>LSTM Cell State Magnitude</h4>
+                            <div class="chart-container"><canvas id="cellStateChartA"></canvas></div>
+                        </div>
+                        <hr style="margin:2rem 0;border-color:var(--border);">
+                        <h3>Compare Mode — Sentence B</h3>
+                        <div class="input-group" style="max-width:500px;margin-bottom:1rem;">
+                            <label>Sentence B:</label>
+                            <input type="text" id="sim5-input-b"
+                                value="The story was boring but the visuals were beautiful">
+                        </div>
+                        <div id="sim5-attribution-b" class="attribution-viz vertical"></div>
+                        <div class="cell-state-viz" id="cell-state-section-b">
+                            <h4>LSTM Cell State Magnitude — Sentence B</h4>
+                            <div class="chart-container"><canvas id="cellStateChartB"></canvas></div>
+                        </div>
+                        <div class="educational-note" style="margin-top:1.5rem;">
+                            <strong>📝 Key Insight:</strong> RNNs assign strong influence to recent sentiment words but
+                            weak influence to early context. LSTMs distribute influence more evenly, allowing context
+                            words to shape the cell state over time. Compare sentences A and B to see how word order
+                            changes attribution.
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <button class="reset-btn" onclick="resetSim5()" title="Reset Simulation">↺ Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SIM 6: Model Comparison ─── -->
+        <div id="sim6" class="tab-content">
+            <div class="sim-layout">
+                <aside class="sim-sidebar glass-panel">
+                    <h2>Model Comparison</h2>
+                    <p>A professional dashboard summarizing the full experiment results.</p>
+
+                    <h3>Key Concepts</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li><strong>Generalization:</strong> Test accuracy reveals true model capability.</li>
+                            <li><strong>ROC/AUC:</strong> Measures classification quality across thresholds.</li>
+                            <li><strong>F1 Score:</strong> Harmonic mean of precision and recall.</li>
+                        </ul>
+                    </div>
+
+                    <h3>Dataset</h3>
+                    <div class="observe-box glass-panel">
+                        <ul>
+                            <li>IMDB Movie Reviews (Binary Sentiment)</li>
+                            <li>Train: 7,000 | Val: 1,500 | Test: 1,500</li>
+                            <li>Balanced: 750 positive / 750 negative</li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <div class="sim-main">
+                    <div class="sim-card">
+                        <div class="dashboard-grid">
+                            <div class="dash-card">
+                                <h3>📊 Accuracy Comparison</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th style="color:#ef4444;">RNN</th>
+                                            <th style="color:#3b82f6;">LSTM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Train Accuracy</td>
+                                            <td><span class="counter" data-target="90.76">0</span>%</td>
+                                            <td><span class="counter" data-target="96.17">0</span>%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Val Accuracy</td>
+                                            <td><span class="counter" data-target="79.47">0</span>%</td>
+                                            <td><span class="counter" data-target="87.33">0</span>%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Test Accuracy</td>
+                                            <td><span class="counter" data-target="78.87">0</span>%</td>
+                                            <td><span class="counter" data-target="84.80">0</span>%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="dash-card">
+                                <h3>📈 Accuracy Bar Chart</h3>
+                                <canvas id="compareBarChart"></canvas>
+                            </div>
+                            <div class="dash-card">
+                                <h3>📉 ROC Curve</h3>
+                                <canvas id="rocChart"></canvas>
+                            </div>
+                            <div class="dash-card">
+                                <h3>📉 Precision-Recall Curve</h3>
+                                <canvas id="prChart"></canvas>
+                            </div>
+                            <div class="dash-card f1">
+                                <h3>🎯 F1 Score Comparison</h3>
+                                <div class="f1-bars">
+                                    <div class="f1-bar-row">
+                                        <span class="label">RNN</span>
+                                        <div class="bar-track">
+                                            <div class="bar-fill rnn" id="f1-rnn-bar" style="width:0%">
+                                                <span>78.5%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="f1-bar-row">
+                                        <span class="label">LSTM</span>
+                                        <div class="bar-track">
+                                            <div class="bar-fill lstm" id="f1-lstm-bar" style="width:0%">
+                                                <span>84.2%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="educational-note" style="margin-top:2rem;">
+                            <strong>🔑 Key Takeaways:</strong>
+                            <ul style="margin-top:0.5rem;padding-left:1.2rem;">
+                                <li>LSTM handles long-term dependencies significantly better than RNN.</li>
+                                <li>RNN suffers from vanishing gradient, limiting its learning capacity.</li>
+                                <li>LSTM generalizes better — higher validation and test performance.</li>
+                                <li>Despite using only 64 units vs RNN's 256, LSTM outperforms across all metrics.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
