@@ -2,7 +2,7 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "What is Sentiment Analysis?",
+      "question": "1. What is Sentiment Analysis?",
       "answers": {
         "a": "Identifying the genre of a movie",
         "b": "Detecting emotions or opinions expressed in text",
@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "In sentiment analysis, a movie review labelled as “1” usually indicates:",
+      "question": "2. In sentiment analysis, a movie review labelled as “1” usually indicates:",
       "answers": {
         "a": "Neutral sentiment",
         "b": "Negative review",
@@ -36,7 +36,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why are movie reviews challenging for sentiment analysis?",
+      "question": "3. Why are movie reviews challenging for sentiment analysis?",
       "answers": {
         "a": "Long-range dependencies and negations affect meaning",
         "b": "Sentiment depends only on individual words",
@@ -53,7 +53,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the main limitation of a simple Recurrent Neural Network (RNN)?",
+      "question": "4. What is the main limitation of a simple Recurrent Neural Network (RNN)?",
       "answers": {
         "a": "It cannot process sequential data",
         "b": "It suffers from vanishing and exploding gradient problems",
@@ -70,7 +70,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the primary purpose of gates in an LSTM network?",
+      "question": "5. What is the primary purpose of gates in an LSTM network?",
       "answers": {
         "a": "To increase the number of neurons",
         "b": "To randomly drop connections",
@@ -87,7 +87,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which dataset is commonly used for benchmarking sentiment analysis models?",
+      "question": "6. Which dataset is commonly used for benchmarking sentiment analysis models?",
       "answers": {
         "a": "MNIST",
         "b": "CIFAR-10",
@@ -104,7 +104,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Sentiment analysis is an example of which type of learning?",
+      "question": "7. Sentiment analysis is an example of which type of learning?",
       "answers": {
         "a": "Unsupervised learning",
         "b": "Reinforcement learning",
@@ -121,7 +121,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What does the term “binary classification” mean in this experiment?",
+      "question": "8. What does the term “binary classification” mean in this experiment?",
       "answers": {
         "a": "Classifying data into two distinct classes",
         "b": "Predicting numerical values",
@@ -138,7 +138,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why is word order important in sentiment analysis?",
+      "question": "9. Why is word order important in sentiment analysis?",
       "answers": {
         "a": "Because models ignore punctuation",
         "b": "Because sentiment depends on context and sequence of words",
@@ -155,7 +155,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why is the IMDB dataset suitable for LSTM-based sentiment analysis?",
+      "question": "10. Why is the IMDB dataset suitable for LSTM-based sentiment analysis?",
       "answers": {
         "a": "It contains only short sentences",
         "b": "It is balanced and contains long text sequences",

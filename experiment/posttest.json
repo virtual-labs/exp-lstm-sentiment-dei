@@ -2,7 +2,7 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Why is text preprocessing necessary before training the RNN and LSTM models?",
+      "question": "1. Why is text preprocessing necessary before training the RNN and LSTM models?",
       "answers": {
         "a": "To remove noise such as punctuation, digits, and extra spaces",
         "b": "To increase the number of words in each review",
@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the purpose of tokenization in the experiment?",
+      "question": "2. What is the purpose of tokenization in the experiment?",
       "answers": {
         "a": "To directly classify text into positive or negative classes",
         "b": "To map words into integer indices for neural network input",
@@ -36,7 +36,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why are sequences padded to a fixed maximum length?",
+      "question": "3. Why are sequences padded to a fixed maximum length?",
       "answers": {
         "a": "To increase vocabulary size",
         "b": "To ensure all inputs have the same length for batch processing",
@@ -53,7 +53,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What role does the Embedding layer play in the models?",
+      "question": "4. What role does the Embedding layer play in the models?",
       "answers": {
         "a": "It converts probabilities into class labels",
         "b": "It reduces the number of epochs required",
@@ -70,7 +70,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why is binary cross-entropy used as the loss function in this experiment?",
+      "question": "5. Why is binary cross-entropy used as the loss function in this experiment?",
       "answers": {
         "a": "Because the dataset has multiple sentiment classes",
         "b": "Because it reduces overfitting automatically",
@@ -87,7 +87,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What does a confusion matrix help evaluate in sentiment analysis?",
+      "question": "6. What does a confusion matrix help evaluate in sentiment analysis?",
       "answers": {
         "a": "Word frequency distribution",
         "b": "Relationship between training and validation loss",
@@ -104,7 +104,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why are ROC and Precision–Recall curves plotted in this experiment?",
+      "question": "7. Why are ROC and Precision–Recall curves plotted in this experiment?",
       "answers": {
         "a": "To visualize training time",
         "b": "To analyse classifier performance across different thresholds",
@@ -121,7 +121,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Why does the LSTM model generally perform better than a Simple RNN in this experiment?",
+      "question": "8. Why does the LSTM model generally perform better than a Simple RNN in this experiment?",
       "answers": {
         "a": "LSTM has fewer parameters",
         "b": "LSTM removes vanishing gradients completely",
@@ -138,7 +138,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What does validation accuracy indicate during training?",
+      "question": "9. What does validation accuracy indicate during training?",
       "answers": {
         "a": "Model performance on unseen test data",
         "b": "Model performance on training data only",
@@ -155,7 +155,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the final objective of comparing Simple RNN and LSTM models in this experiment?",
+      "question": "10. What is the final objective of comparing Simple RNN and LSTM models in this experiment?",
       "answers": {
         "a": "To demonstrate the importance of long-term dependency modelling in sentiment analysis",
         "b": "To prove that RNN is always better than LSTM",
