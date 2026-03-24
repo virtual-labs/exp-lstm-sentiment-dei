@@ -1,1 +1,1 @@
-## LSTM for Sentiment Analysis
+## Long-Short Term Memory (LSTM) for Sentiment Analysis
