@@ -464,7 +464,7 @@ function showCompletionMessage() {
 function downloadExperiment() {
     // Download the experiment PDF
     const link = document.createElement('a');
-    link.href = './assets/Exp_7_LSTM_for_Sentiment_Analysis.pdf';
+    link.href = './assets/Exp7_LSTM_for_Sentiment_Analysis.pdf';
     link.download = 'LSTM_Sentiment_Analysis_Experiment.pdf';
     document.body.appendChild(link);
     link.click();
