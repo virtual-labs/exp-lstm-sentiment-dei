@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "2. In sentiment analysis, a movie review labelled as “1” usually indicates:",
+      "question": "2. In the IMDB dataset used in this experiment, what does a label of 1 indicate?",
       "answers": {
         "a": "Neutral sentiment",
         "b": "Negative review",
@@ -104,7 +104,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "7. Sentiment analysis is an example of which type of learning?",
+      "question": "7. As formulated in this experiment, sentiment analysis is an example of which type of learning?",
       "answers": {
         "a": "Unsupervised learning",
         "b": "Reinforcement learning",

@@ -43,7 +43,7 @@
    An LSTM-based model is constructed using:
    - An embedding layer.
    - An LSTM layer with dropout to reduce overfitting.
-   - A sigmoid-activated output layer
+   - A sigmoid-activated output layer.
 
    The gating mechanisms in the LSTM enable effective learning of long-term dependencies in textual data.
 
@@ -72,4 +72,4 @@
    Learning curves for training and validation loss and accuracy are plotted to analyse model convergence and overfitting behaviour. Additionally, ROC curves and precision–recall curves are generated to assess classification performance more comprehensively.
 
 15. **Performance Comparison:**
-   Finally, the performance of the Simple RNN and LSTM models is compared based on accuracy, loss trends, ROC–AUC scores, and classification metrics to highlight the effectiveness of LSTM in handling long-term dependencies in sentiment analysis tasks, by analysing individual curves for both RNN and LSTM, as well as the combined curves.
+   Finally, the performance of the Simple RNN and LSTM models is compared based on accuracy, loss trends, ROC–AUC scores, and classification metrics to highlight the effectiveness of LSTM in handling long-term dependencies in sentiment analysis tasks, by analysing both the individual performance curves of the RNN and LSTM models as well as their combined comparative curves.
