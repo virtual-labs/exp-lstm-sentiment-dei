@@ -18,8 +18,8 @@ variants, such as Long Short-Term Memory (LSTM) networks, are particularly well-
 ---
 
 #### Long Short-Term Memory (LSTM)
-Long Short-Term Memory (LSTM) is a specialized type of Recurrent Neural Network (RNN) designed to
-overcome the key limitations of traditional RNNs, particularly the vanishing and exploding gradient problems. LSTM networks were introduced by Hochreiter and Schmidhuber in 1997 with the explicit goal of enabling neural networks to learn and retain long-term dependencies in sequential data.
+
+Long Short-Term Memory (LSTM) is a specialized type of Recurrent Neural Network (RNN) designed to mitigate the vanishing gradient problem encountered in traditional RNNs while improving the learning of long-term dependencies in sequential data. LSTM networks were introduced by Hochreiter and Schmidhuber in 1997 with the explicit goal of enabling neural networks to learn and retain long-term dependencies in sequential data.
 
 Unlike standard RNNs, which rely solely on a single hidden state, LSTMs introduce an internal cell state that acts as a memory pipeline. This cell state allows information to flow across time steps with minimal modification, making it easier for gradients to propagate during backpropagation through time (BPTT). As a result, LSTMs are capable of remembering important contextual information over long sequences while selectively forgetting irrelevant details.
 
@@ -35,7 +35,7 @@ An LSTM cell consists of several interacting components that regulate the flow o
 
     $$i_t = \sigma(W_i[h_{t-1}, p_t] + b_i)$$
 
-3.  **Candidate Cell State ($\tilde{C}_t$):** The candidate cell state is the key to LSTMs and represents the memory of LSTM networks. It represents new information that could potentially be added to the memory. The LSTM block removes or adds information to the cell state through the gates, which allow optional information to cross.
+3.  **Candidate Cell State ($\tilde{C}_t$):** The candidate cell state represents new information generated from the current input and previous hidden state that may be added to the cell state. It is computed using a $\tanh$ activation function, producing values in the range [-1,1]. The input gate determines how much of this candidate information should be incorporated into the updated cell state.
 
     $$\tilde{C}_t = \tanh(W_c[h_{t-1}, p_t] + b_c)$$
 
@@ -47,7 +47,7 @@ An LSTM cell consists of several interacting components that regulate the flow o
 
     $$o_t = \sigma(W_o[h_{t-1}, p_t] + b_o)$$
 
-6.  **Hidden State ($h_t$):** The hidden state represents the final output of the LSTM cell at time step $t$. It is obtained by applying a tanh activation to the updated cell state and modulating it with the output gate.
+6.  **Hidden State ($h_t$):** The hidden state represents the final output of the LSTM cell at time step $t$. It is obtained by applying a $\tanh$ activation to the updated cell state and modulating it with the output gate.
 
     $$h_t = o_t \cdot \tanh(C_t)$$
 
@@ -55,16 +55,15 @@ An LSTM cell consists of several interacting components that regulate the flow o
 
 #### LSTM Architecture & Information Flow-
 
-The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM
-networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block introduces four additional components: the cell state ($C_t$), forget gate ($f_t$), input gate ($i_t$), and output gate ($o_t$). These components interact in a carefully designed manner to regulate the flow of information across time steps.
+The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block introduces additional components including the cell state ($C_t$), forget gate ($f_t$), input gate ($i_t$), candidate cell state ($\tilde{C}_t$), and output gate ($o_t$). These components interact in a carefully designed manner to regulate the flow of information across time steps.
 
-The $p_t$, $h_{t-1}$, and $C_{t-1}$ correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input-update, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
+The $p_t$, $h_{t-1}$, and $C_{t-1}$ correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
 **Fig. 1.** Architecture of LSTM.
 
-(Source: H. Okut, "Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory," IntechOpen).
+(Source: H. Okut, “Deep Learning for Subtyping and Prediction of Diseases: Long Short-Term Memory,” IntechOpen, 2021)
 
 Due to these properties, LSTMs are widely used in applications such as sentiment analysis, machine translation, speech recognition, and time-series forecasting, where understanding long-range dependencies is critical for accurate predictions.
 

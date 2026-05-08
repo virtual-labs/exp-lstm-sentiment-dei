@@ -140,15 +140,15 @@
     {
       "question": "9. What does validation accuracy indicate during training?",
       "answers": {
-        "a": "Model performance on unseen test data",
+        "a": "The number of words correctly classified in the vocabulary",
         "b": "Model performance on training data only",
         "c": "Model generalization performance during training",
         "d": "Vocabulary learning quality"
       },
       "explanations": {
-        "a": "Incorrect because validation data is separate from the test set.",
+        "a": "Incorrect because validation accuracy measures model prediction performance on validation data, not the number of correctly classified words in the vocabulary.",
         "b": "Incorrect because training accuracy reflects training performance.",
-        "c": "Correct because validation accuracy estimates how well the model generalizes.",
+        "c": "Correct because validation accuracy estimates how well the model generalizes to unseen data.",
         "d": "Incorrect because vocabulary is fixed during tokenization."
       },
       "correctAnswer": "c",
