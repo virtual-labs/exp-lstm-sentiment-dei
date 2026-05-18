@@ -27,7 +27,7 @@
         "d": "To evaluate model accuracy"
       },
       "explanations": {
-        "a": "Incorrect because tokenization only converts text into numerical format.",
+        "a": "Incorrect because tokenization only converts text into a numerical format.",
         "b": "Correct because neural networks require numerical input, not raw text.",
         "c": "Incorrect because tokenization does not necessarily remove stop words.",
         "d": "Incorrect because evaluation is done after model prediction."
@@ -41,7 +41,7 @@
         "a": "To increase vocabulary size",
         "b": "To ensure all inputs have the same length for batch processing",
         "c": "To improve GPU memory usage",
-        "d": "To convert labels into binary format"
+        "d": "To convert labels into a binary format"
       },
       "explanations": {
         "a": "Incorrect because padding does not affect vocabulary.",
@@ -148,7 +148,7 @@
       "explanations": {
         "a": "Incorrect because validation accuracy measures model prediction performance on validation data, not the number of correctly classified words in the vocabulary.",
         "b": "Incorrect because training accuracy reflects training performance.",
-        "c": "Correct because validation accuracy estimates how well the model generalizes to unseen data.",
+        "c": "Correct because validation accuracy estimates how well the model generalizes.",
         "d": "Incorrect because vocabulary is fixed during tokenization."
       },
       "correctAnswer": "c",
@@ -165,7 +165,7 @@
       "explanations": {
         "a": "Correct because movie reviews require contextual understanding over long sequences.",
         "b": "Incorrect because results depend on task complexity.",
-        "c": "Incorrect because comparison does not affect dataset.",
+        "c": "Incorrect because comparison does not affect the dataset.",
         "d": "Incorrect because preprocessing remains essential."
       },
       "correctAnswer": "a",

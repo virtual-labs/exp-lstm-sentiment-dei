@@ -5,7 +5,7 @@
 
 
 2. **Dataset Loading:**
-   The IMDB Movie Reviews dataset is loaded by reading text files from the predefined positive and negative review directories. To ensure manageable training time and controlled experimentation, a balanced subset of the dataset is used. Each review is assigned a sentiment label, where positive reviews are labelled as 1 and negative reviews as 0.
+   The IMDB Movie Reviews dataset is loaded by reading text files from the predefined positive and negative review directories. To ensure manageable training time and controlled experimentation, a balanced subset of the dataset is used. Each review is assigned a sentiment label, with positive reviews labelled 1 and negative reviews 0.
 
 
 3. **Text Preprocessing:**
@@ -14,7 +14,7 @@
    - Removing punctuation marks, digits, and special characters.
    - Eliminating extra whitespaces.
 
-   This step helps reduce noise and improves the quality of textual features learned by the models. 
+   This step helps reduce noise and improve the quality of textual features learned by the models. 
 
 4. **Data Splitting:**
    The cleaned dataset is divided into three subsets:
@@ -25,7 +25,7 @@
    A stratified splitting strategy is used to ensure equal representation of positive and negative reviews across all subsets.
 
 5. **Text Tokenization:**
-   The preprocessed text data is converted into numerical format using a tokenizer with a fixed vocabulary size. Each word is mapped to a unique integer index based on frequency. Words not present in the vocabulary are replaced with an out-of-vocabulary (OOV) token to handle unseen words.
+   The preprocessed text data is converted into a numerical format using a tokenizer with a fixed vocabulary size. Each word is assigned a unique integer index based on its frequency. Words not present in the vocabulary are replaced with an out-of-vocabulary (OOV) token to handle unseen words.
 
 6. **Sequence Padding:**
    Since movie reviews vary in length, all tokenized sequences are padded or truncated to a fixed maximum sequence length. This ensures uniform input dimensions for batch processing by the neural network models.
@@ -55,18 +55,18 @@
 
 11. **Model Training:**
    The RNN and LSTM models are trained for 150 epochs with a batch size of 128. During training:
-   - Model checkpointing is used to save the model with the best validation accuracy.
-   - Learning rate scheduling is applied using ReduceLROnPlateau to reduce the learning rate when   validation loss stagnates.
+    - Model checkpointing is used to save the model achieving the highest validation accuracy.
+    - Learning rate scheduling is applied using ReduceLROnPlateau to reduce the learning rate when   validation loss stagnates.
 
 12. **Model Selection:**
    After training, the best-performing versions of both models are loaded from the saved checkpoints. This ensures that evaluation is performed using the model state that generalizes best to unseen data.
 
 13. **Model Evaluation:**
    The selected RNN and LSTM models are evaluated on the test dataset. Performance metrics include:
-   - Training and validation accuracy trends observed during model training.
-   - Test accuracy obtained from the final evaluation.
-   - Confusion matrix.
-   - Classification report consisting of precision, recall, and F1-score.
+    - Training and validation accuracy trends observed during model training.
+    - Test accuracy obtained from the final evaluation.
+    - Confusion matrix.
+    - Classification report consisting of precision, recall, and F1-score.
 
 14. **Performance Visualization:**
    Learning curves for training and validation loss and accuracy are plotted to analyse model convergence and overfitting behaviour. Additionally, ROC curves and precision–recall curves are generated to assess classification performance more comprehensively.

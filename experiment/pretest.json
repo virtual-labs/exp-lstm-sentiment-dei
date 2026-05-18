@@ -40,7 +40,7 @@
       "answers": {
         "a": "Long-range dependencies and negations affect meaning",
         "b": "Sentiment depends only on individual words",
-        "c": "Reviews always have fixed length",
+        "c": "Reviews always have a fixed length",
         "d": "Reviews contain only numerical data"
       },
       "explanations": {
@@ -141,7 +141,7 @@
       "question": "9. Why is word order important in sentiment analysis?",
       "answers": {
         "a": "Because models ignore punctuation",
-        "b": "Because sentiment depends on context and sequence of words",
+        "b": "Because sentiment depends on context and the sequence of words",
         "c": "Because reversing words does not change meaning",
         "d": "Because all words have equal importance"
       },

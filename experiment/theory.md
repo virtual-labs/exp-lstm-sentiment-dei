@@ -19,11 +19,11 @@ variants, such as Long Short-Term Memory (LSTM) networks, are particularly well-
 
 #### Long Short-Term Memory (LSTM)
 
-Long Short-Term Memory (LSTM) is a specialized type of Recurrent Neural Network (RNN) designed to mitigate the vanishing gradient problem encountered in traditional RNNs while improving the learning of long-term dependencies in sequential data. LSTM networks were introduced by Hochreiter and Schmidhuber in 1997 with the explicit goal of enabling neural networks to learn and retain long-term dependencies in sequential data.
+Long Short-Term Memory (LSTM) is a specialized type of Recurrent Neural Network (RNN) designed to mitigate the vanishing gradient problem in traditional RNNs and improve the learning of long-term dependencies in sequential data. LSTM networks were introduced by Hochreiter and Schmidhuber in 1997 with the explicit goal of enabling neural networks to learn and retain long-term dependencies in sequential data.
 
 Unlike standard RNNs, which rely solely on a single hidden state, LSTMs introduce an internal cell state that acts as a memory pipeline. This cell state allows information to flow across time steps with minimal modification, making it easier for gradients to propagate during backpropagation through time (BPTT). As a result, LSTMs are capable of remembering important contextual information over long sequences while selectively forgetting irrelevant details.
 
-**LSTM Cell Components:**
+**LSTM Cell Components-**
 
 An LSTM cell consists of several interacting components that regulate the flow of information using gating mechanisms. These gates are implemented using sigmoid and tanh activation functions, which enable fine-grained control over memory updates.
 
@@ -55,9 +55,9 @@ An LSTM cell consists of several interacting components that regulate the flow o
 
 #### LSTM Architecture & Information Flow-
 
-The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block introduces additional components including the cell state ($C_t$), forget gate ($f_t$), input gate ($i_t$), candidate cell state ($\tilde{C}_t$), and output gate ($o_t$). These components interact in a carefully designed manner to regulate the flow of information across time steps.
+The neural network architecture of an LSTM block, illustrated in Figure 1, demonstrates how LSTM networks extend the memory capabilities of traditional RNNs. In addition to the hidden state used in RNNs, an LSTM block introduces additional components, including the cell state ($C_t$), forget gate ($f_t$), input gate ($i_t$), candidate cell state ($\tilde{C}_t$), and output gate ($o_t$). These components interact in a carefully designed manner to regulate the flow of information across time steps.
 
-The $p_t$, $h_{t-1}$, and $C_{t-1}$ correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
+The $p_t$, $h_{t-1}$, and $C_{t-1}$ correspond to the input of the current time step, the hidden output from the previous time step, and the cell state (memory) of the previous unit, respectively. The information from the previous LSTM unit is combined with the current input to effectively model sequential patterns and contextual relationships in text data. The LSTM blocks are mainly divided into three gates: forget, input, and output. Each of these gates is connected to the cell state to provide the necessary information that flows from the current time step to the next.
 
 ![Figure 1- Architecture of LSTM](images/lstm_architecture.png)
 
@@ -75,7 +75,7 @@ A key reason why LSTMs are able to overcome the vanishing gradient problem lies 
 
 $$C_t = f_t \cdot C_{t-1} + i_t \cdot \tilde{C}_t$$
 
-Unlike traditional RNNs, where the hidden state is repeatedly transformed through nonlinear activation functions (such as tanh or sigmoid), leading to rapid shrinking of gradients, the LSTM cell state follows an additive update mechanism.
+Unlike traditional RNNs, where the hidden state is repeatedly transformed by nonlinear activation functions (such as tanh or sigmoid), leading to rapid gradient shrinkage, the LSTM cell state follows an additive update mechanism.
 
 This has the following two important effects:
 
@@ -87,7 +87,7 @@ Thus, in simpler terms:
 -   In traditional RNNs, repeated multiplicative transformations across time steps lead to rapid attenuation of gradients.
 -   In LSTMs, the additive cell state updates combined with gated mechanisms enable stable gradient propagation over long sequences.
 
-The cell state therefore acts as an efficient pathway for gradient flow, allowing information and gradients to propagate across long sequences with minimal attenuation.
+The cell state, therefore, acts as an efficient pathway for gradient flow, allowing information and gradients to propagate across long sequences with minimal attenuation.
 
 ---
 
