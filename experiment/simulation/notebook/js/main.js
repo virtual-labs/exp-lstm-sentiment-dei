@@ -384,6 +384,10 @@ async function executeCell(cellNumber) {
 // ============================================
 
 function resetSimulation() {
+    if (!confirm('Are you sure you want to reset the entire experiment?')) {
+        return;
+    }
+    
     state.currentStep = 1;
     state.completedSteps.clear();
     state.runningStep = null;
@@ -428,6 +432,12 @@ function resetSimulation() {
     // Hide completion message
     elements.completionMessage.classList.add('hidden');
     
+    // Lock download button again
+    if (elements.downloadBtn) {
+        elements.downloadBtn.classList.add('btn-locked');
+        elements.downloadBtn.title = 'Run all cells to enable download';
+    }
+    
     // Update button states
     updateRunButtonStates();
 }
@@ -439,6 +449,12 @@ function resetSimulation() {
 function showCompletionMessage() {
     elements.completionMessage.classList.remove('hidden');
     elements.completionMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Enable download button
+    if (elements.downloadBtn) {
+        elements.downloadBtn.classList.remove('btn-locked');
+        elements.downloadBtn.title = '';
+    }
 }
 
 // ============================================
@@ -468,9 +484,18 @@ function initEventListeners() {
         }
     });
     
-    // Download button
+    // Download button - lock initially, alert if not all cells run
     if (elements.downloadBtn) {
-        elements.downloadBtn.addEventListener('click', downloadExperiment);
+        elements.downloadBtn.classList.add('btn-locked');
+        elements.downloadBtn.title = 'Run all cells to enable download';
+        
+        elements.downloadBtn.addEventListener('click', () => {
+            if (elements.downloadBtn.classList.contains('btn-locked')) {
+                alert('Please run all the cells first to download the experiment.');
+                return;
+            }
+            downloadExperiment();
+        });
     }
     
     // Reset button
